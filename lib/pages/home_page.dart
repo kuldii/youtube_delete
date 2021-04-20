@@ -1,15 +1,16 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 
-// import '../models/http_provider.dart';
+import '../models/http_provider.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // final dataResponse = Provider.of<HttpProvider>(context, listen: false);
+    final dataProvider = Provider.of<HttpProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text("DELETE - PROVIDER"),
+        title: Text("DELETE - HTTP"),
       ),
       body: Container(
         width: double.infinity,
@@ -22,42 +23,59 @@ class HomePage extends StatelessWidget {
               child: Container(
                 height: 100,
                 width: 100,
-                child: Image.network(
-                  "https://www.uclg-planning.org/sites/default/files/styles/featured_home_left/public/no-user-image-square.jpg?itok=PANMBJF-",
-                  fit: BoxFit.cover,
+                child: Consumer<HttpProvider>(
+                  builder: (context, value, child) => Image.network(
+                    (value.data["avatar"] == null)
+                        ? "https://www.uclg-planning.org/sites/default/files/styles/featured_home_left/public/no-user-image-square.jpg?itok=PANMBJF-"
+                        : value.data["avatar"],
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
             SizedBox(height: 20),
             FittedBox(
-              child: Text(
-                "ID : Belum ada data",
-                style: TextStyle(fontSize: 20),
+              child: Consumer<HttpProvider>(
+                builder: (context, value, child) => Text(
+                  (value.data["id"] == null)
+                      ? "ID : Belum ada data"
+                      : "ID : ${value.data["id"]}",
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
             ),
             SizedBox(height: 20),
             FittedBox(child: Text("Name : ", style: TextStyle(fontSize: 20))),
             FittedBox(
-              child: Text(
-                "Belum ada data",
-                style: TextStyle(
-                  fontSize: 20,
+              child: Consumer<HttpProvider>(
+                builder: (context, value, child) => Text(
+                  (value.data["first_name"] == null ||
+                          value.data["last_name"] == null)
+                      ? "Belum ada data"
+                      : value.data["first_name"] +
+                          " " +
+                          value.data["last_name"],
+                  style: TextStyle(fontSize: 20),
                 ),
               ),
             ),
             SizedBox(height: 20),
             FittedBox(child: Text("Email : ", style: TextStyle(fontSize: 20))),
             FittedBox(
-              child: Text(
-                "Belum ada data",
-                style: TextStyle(
-                  fontSize: 20,
+              child: Consumer<HttpProvider>(
+                builder: (context, value, child) => Text(
+                  (value.data["email"] == null)
+                      ? "Belum ada data"
+                      : value.data["email"],
+                  style: TextStyle(fontSize: 20),
                 ),
               ),
             ),
             SizedBox(height: 100),
             OutlinedButton(
-              onPressed: () {},
+              onPressed: () {
+                dataProvider.connectAPI((1 + Random().nextInt(10)).toString());
+              },
               child: Text(
                 "GET DATA",
                 style: TextStyle(
