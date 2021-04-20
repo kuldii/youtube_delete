@@ -83,15 +83,6 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            Consumer<HttpProvider>(
-              builder: (context, value, child) => Text(
-                (value.message == "") ? "" : value.message,
-                style: TextStyle(
-                  fontSize: 20,
-                  color: (value.status == 200) ? Colors.green : Colors.red,
-                ),
-              ),
-            ),
           ],
         ),
       ),
