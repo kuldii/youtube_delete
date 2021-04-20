@@ -9,12 +9,17 @@ class HttpProvider with ChangeNotifier {
 
   int get jumlahData => _data.length;
 
+  String message = "";
+  int status = 0;
+
   void connectAPI(String id) async {
     Uri url = Uri.parse("https://reqres.in/api/users/" + id);
 
     var hasilResponse = await http.get(url);
 
     _data = (json.decode(hasilResponse.body))["data"];
+    message = "Berhasil GET data";
+    status = 200;
     notifyListeners();
   }
 }
